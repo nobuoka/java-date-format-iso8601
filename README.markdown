@@ -1,6 +1,8 @@
 ISO 8601 DateFormat
 ==============================
 
+[![Build Status](https://travis-ci.org/nobuoka/java-date-format-iso8601.svg?branch=master)](https://travis-ci.org/nobuoka/java-date-format-iso8601)
+
 This library provides a subclass of [`DateFormat` class](https://docs.oracle.com/javase/8/docs/api/java/text/DateFormat.html)
 to parse and format dates formats of which are specified by [ISO 8601](http://www.iso.org/iso/home/standards/iso8601.htm)
 (or by [RFC 3339](https://tools.ietf.org/html/rfc3339) or [W3C-DTF](https://www.w3.org/TR/1998/NOTE-datetime-19980827)).
