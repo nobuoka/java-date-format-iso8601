@@ -25,9 +25,19 @@ On Java SE 8 environments (or later), you should probably use the
 [Date and Time API](http://www.oracle.com/technetwork/articles/java/jf14-date-time-2125367.html).
 If you want to use Date and Time API on Android platforms, see [ThreeTen Android Backport](https://github.com/JakeWharton/ThreeTenABP).
 
-## Usage
+## Dependencies
 
 This library is published to JCenter.
+With Gradle, write following settings to use this library.
+
+```groovy
+repositories { jcenter() }
+dependencies {
+    compile 'info.vividcode:date-format-iso8601:1.0.0'
+}
+```
+
+## Usage
 
 ```java
 import info.vividcode.time.iso8601.Iso8601ExtendedOffsetDateTimeFormat;
