@@ -1,13 +1,7 @@
 package info.vividcode.time.iso8601;
 
-import java.text.DateFormat;
-import java.text.FieldPosition;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-import java.util.TimeZone;
+import java.text.*;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -41,6 +35,7 @@ public class Iso8601ExtendedOffsetDateTimeFormat extends DateFormat {
         if (timezoneOnFormat == null)
             throw new IllegalArgumentException("`timezoneOnFormat` must not be null.");
 
+        super.numberFormat = NumberFormat.getIntegerInstance(Locale.ROOT);
         super.calendar = new GregorianCalendar();
         mTimeZoneOnFormat = timezoneOnFormat;
     }
@@ -62,11 +57,27 @@ public class Iso8601ExtendedOffsetDateTimeFormat extends DateFormat {
     public Date parse(String source, ParsePosition pos) {
         int firstIndex = pos.getIndex();
 
-        Date date = mDateTimeSimpleFormat.parse(source, pos);
-        if (date == null) {
-            pos.setIndex(firstIndex);
-            return null;
-        }
+        NumberFormat f = super.numberFormat;
+        super.calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
+
+        int year = f.parse(source, pos).intValue();
+        ParseUtil.parseCharOrNull(source, '-', pos);
+        int month = f.parse(source, pos).intValue();
+        ParseUtil.parseCharOrNull(source, '-', pos);
+        int dayOfMonth = f.parse(source, pos).intValue();
+
+        ParseUtil.parseCharOrNull(source, 'T', pos);
+
+        int hour = f.parse(source, pos).intValue();
+        ParseUtil.parseCharOrNull(source, ':', pos);
+        int minute = f.parse(source, pos).intValue();
+        ParseUtil.parseCharOrNull(source, ':', pos);
+        int second = f.parse(source, pos).intValue();
+
+        super.calendar.set(year, month - 1, dayOfMonth, hour, minute, second);
+        super.calendar.clear(Calendar.MILLISECOND);
+
+        Date date = super.calendar.getTime();
 
         Iso8601TimeZone timeZone = mTimeZoneParser.parseTimeZone(source, pos);
         if (timeZone == null) {
